@@ -44,7 +44,7 @@ const getProjects = asyncHandler(async (req,res) => {
     {
       $project:{
         Project:{
-          _id : 1,
+          _id : 1, //In MongoDB $project, 1 means "Show it" and 0 means "Hide it".
           name : 1,
           description : 1,
           members : 1,
@@ -60,23 +60,65 @@ const getProjects = asyncHandler(async (req,res) => {
   .status(200)
   .json(new ApiResponse(200, projects, "Projects fetched successfully"));
 },
-)
-const getProjectById = async (req, res) => {
-  // get project by id
-};
+);
+const getProjectById = asyncHandler(async (req,res) => {
+  const { ProjectId } = req.params;
+  const project = await Project.findById(ProjectId) ;
+  if(!project){
+    throw new ApiError(404, "Project not found");
+  } 
+  return res
+    .status(200)
+    .json(new ApiResponse(200, project, "Project fetched successfully"))
+})
+const createProject = asyncHandler(async (req,res) => {
+  const { name,description } = req.body;
+  const project = await Project.create({
+    name,
+    description,
+    createdBy: new mongoose.Types.ObjectId(req.user._id)
 
-const createProject = async (req, res) => {
-  // create project
-};
+  })
+  await ProjectMember.create({
+    user: new mongoose.Types.ObjectId(req.user._id),
+    project: new mongoose.Types.ObjectId(project._id),
+    role: UserRolesEnum.ADMIN 
+  })
+return res
+    .status(201)
+    .json(new ApiResponse(201, project, "Project created successfully"));
+});
+const updateProject = asyncHandler(async (req,res) => {
+  const { name,description } = req.body;
+  const { projectId } = req.params;
 
-const updateProject = async (req, res) => {
-  // update project
-};
+  const project = await Project.findByIdAndUpdate(projectId,
+    {
+      name,
+      description,
+    },
+    {new:ture}
+  );
 
-const deleteProject = async (req, res) => {
-  // delete project
-};
+  if(!project){
+    throw new ApiError(404, "Project not found");
+  }
 
+  return res
+    .status(200)
+    .json(new ApiResponse(200, project, "Project updated successfully"));
+})
+const deleteProject = asyncHandler(async (req,res) => {
+  const { projectId } = req.params;
+  const project = await Project.findByIdAndDelete(projectId);
+  if(!projectId){
+    throw new ApiError(404, "Project not found");
+  }  
+  return res
+    .status(200)
+    .json(new ApiResponse(200, project, "Project deleted successfully"));
+
+})
 const getProjectMembers = async (req, res) => {
   // get project members
 };
