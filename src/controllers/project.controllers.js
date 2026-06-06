@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
-import { Project } from "../models/project.models";
-import { User } from "../models/user.models";
-import { ApiError } from "../utils/api-errors";
-import { ApiResponse } from"../utils/api-response";
+import { Project } from "../models/project.models.js";
+import { User } from "../models/user.models.js";
+import { ApiError } from "../utils/api-errors.js";
+import { ApiResponse } from"../utils/api-response.js";
 import { ProjectMember } from"../models/projectmember.models.js"
-import { asyncHandler } from "../utils/async-handler";
+import { asyncHandler } from "../utils/async-handler.js";
 import {AvailableUserRoles,UserRolesEnum} from "../utils/constants.js";
 const getProjects = asyncHandler(async (req,res) => {
   const projects =  await ProjectMember.aggregate([
@@ -155,7 +155,7 @@ const getProjectMembers = asyncHandler(async (req, res) => {
     {
       $addFields: {
         user: {
-          $arrayElemAt: ["$user", 0],
+          $arrayElementAt: ["$user", 0],
         },
       },
     },
@@ -208,7 +208,7 @@ const addMemberToProject = asyncHandler(async (req,res) => {
 const deleteMember = asyncHandler(async (req,res) => {
   const {projectId,userId} = req.params;
 
-  let projectMember = await ProjectMember.findOne({
+  projectMember = await ProjectMember.findOne({
     project: new mongoose.Types.ObjectId(projectId),
     user: new mongoose.Types.ObjectId(userId)
   });

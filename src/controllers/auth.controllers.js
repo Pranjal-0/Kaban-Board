@@ -8,7 +8,7 @@ import {
   sendEmail,
 } from "../utils/mailgen.js";
 import { response } from "express";
-import { validate } from "../middlewares/validator.middleware.js";
+import { validate } from "../middlewares/validator.middlewares.js";
 
 
 
