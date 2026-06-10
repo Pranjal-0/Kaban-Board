@@ -1,10 +1,11 @@
 import mongoose from "mongoose";
-import { ProjectNote } from "../models/note.models.js";
 import { Project } from "../models/project.models.js";
-import { ApiError } from "../utils/api-error.js";
+import { ProjectMember } from "../models/projectmember.models.js";
+import { User } from "../models/user.models.js";
+import { ApiError } from "../utils/api-errors.js";
 import { ApiResponse } from "../utils/api-response.js";
 import { asyncHandler } from "../utils/async-handler.js";
-import { populate } from "dotenv";
+import { AvailableUserRoles, UserRolesEnum } from "../utils/constants.js";
 
 const getNotes  = asyncHandler(async (req,res) => {
   const {projetId} = req.params; 
@@ -21,7 +22,6 @@ const getNotes  = asyncHandler(async (req,res) => {
     .status(200)
     .json(new ApiResponse(200, notes, "Notes fetched successfully"));
 });
-
 const getNoteById = asyncHandler (async (req, res) => {
   const{ noteId } = req.params;
 
@@ -35,7 +35,6 @@ const getNoteById = asyncHandler (async (req, res) => {
     .status(200)
     .json(new ApiResponse(200, note, "Note fetched successfully"));
 });
-
 const createNote = asyncHandler (async (req, res) => {
   const {projetId} = req.params;
   const {content} = req.body;
@@ -56,7 +55,6 @@ const createNote = asyncHandler (async (req, res) => {
     .status(201)
     .json(new ApiResponse(201, populatedNote, "Note created successfully"));
 });
-
 const updateNote = asyncHandler (async (req, res) => {
   const { noteId } = req.params;
   const { content } = req.body;
@@ -77,7 +75,6 @@ const updateNote = asyncHandler (async (req, res) => {
     .json(new ApiResponse(200,note, "Note updated successfully"));
 
 });
-
 const deleteNote = asyncHandler (async (req, res) => {
   const { noteId } = req.params;
   const note = await ProjectNote.findByIdAndDelete(noteId);
