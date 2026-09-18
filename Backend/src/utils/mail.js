@@ -47,8 +47,6 @@ const sendEmail = async (options) => {
     console.error("Error: ", error);
   }
 };
-
-
 const emailVerificationMailgenContent = (username, verificationUrl) => {
   return {
     body: {
@@ -68,7 +66,6 @@ const emailVerificationMailgenContent = (username, verificationUrl) => {
     },
   };
 };
-
 const forgotPasswordMailgenContent = (username, passwordResetUrl) => {
   return {
     body: {
@@ -88,8 +85,6 @@ const forgotPasswordMailgenContent = (username, passwordResetUrl) => {
     },
   };
 };
-
-
 export {
   emailVerificationMailgenContent,
   forgotPasswordMailgenContent,
