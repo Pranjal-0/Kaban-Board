@@ -213,8 +213,47 @@ const forgotPasswordRequest = asyncHandler(async (req, res) => {
     );
 });
 const resetForgottenPassword = asyncHandler(async (req, res) => {
+  const {newPassword} = req.body;
+  const {resetToken} = req.params;//Reading resetToken from req.body is fine if your 
+  // frontend sends it in the JSON body. If your route looks like /reset-password/:resetToken
+  // , remember to read it from req.params
+  if(!resetToken || !newPassword){
+    throw new ApiError(400, "Reset token and new password are required");
+  }
+
+  const hashResetToken = crypto.createHash("sha256").update(resetToken).digest("hex");
+
+  const user = await User.findOne({
+    forgotPasswordToken:hashResetToken,
+
+    forgotPasswordExpiry:{$gt:Date.now()}
+  
+  })
+  if(!user){
+    throw new ApiError(400,"Invalid or expired reset token")
+  }
+  user.password = newPassword;
+  user.forgotPasswordToken = undefined;
+  user.forgotPasswordExpiry = undefined;
+  await user.save();
+  
 });
-const changeCurrentPassword = asyncHandler(async (req, res) => {})
+const changeCurrentPassword = asyncHandler(async (req, res) => {
+  const {oldPassword,newPassword} = req.body;
+  if(!oldPassword||!newPassword){
+    throw new ApiError(400,"Input is missing");
+  }
+  const user = await User.findById(req.user?._id);
+  const isPasswordValid = await user.isPasswordCorrect(oldPassword);
+  if (!isPasswordValid) {
+    throw new ApiError(400, "Invalid old password");
+  }
+  user.password = newPassword;
+  await user.save({ validateBeforeSave: false })
+  return res
+    .status(200)
+    .json(new ApiResponse(200, {}, "Password changed successfully"));
+});
 
 const getCurrentUser = asyncHandler(async (req, res) => {
   return res
