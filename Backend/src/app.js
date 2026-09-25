@@ -19,13 +19,20 @@ app.use(
 import healthcheckRouter from "./routes/healthcheck.routes.js"
 import authRouter from "./routes/auth.routes.js"
 import noteRouter from "./routes/note.routes.js"
+import projectRouter from "./routes/project.routes.js"
+import taskRouter from "./routes/task.routes.js";
 
 
 
-
-
+import { errorHandler } from "./middlewares/error.middleware.js";
 app.use("/api/v1/healthcheck", healthcheckRouter);
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/notes", noteRouter);
+app.use("/api/v1/project", projectRouter);
+app.use("/api/v1/tasks", taskRouter); // each task must have projectId to it for permission check
+
+
+app.use(errorHandler);
+
 
 export default app;
