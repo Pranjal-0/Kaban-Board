@@ -8,14 +8,14 @@ import {
 } from "../controllers/note.controllers.js"
 import {
     validateProjectPermission,  
-    verifyJWT,
+    verifyJwt,
 } from "../middlewares/auth.middleware.js"
 import{validate} from "../middlewares/validators.middlewares.js"
 import { AvailableUserRoles,UserRolesEnum } from "../utils/constants.js";
 import { notesValidator } from "../validators/index.js";
 
 const router = Router();
-router.use(verifyJWT);
+router.use(verifyJwt);
 
 router
     .route("/:projectId")

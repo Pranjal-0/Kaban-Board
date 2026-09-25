@@ -2,9 +2,8 @@ import { asyncHandler } from "../utils/async-handler.js";
 import { User } from "../models/user.models.js"
 import{ApiError} from "../utils/api-error.js"
 import{ApiResponse}from "../utils/api-response.js"
-import{sendEmail} from "../utils/mail.js"
-import {crypto} from "cryptojs"
-import { useReducer } from "react";
+import crypto from "crypto";
+
 
 
 

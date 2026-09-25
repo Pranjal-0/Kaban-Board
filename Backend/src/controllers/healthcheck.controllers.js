@@ -1,9 +1,9 @@
-import {Apiresponse} from "../utils/api-response.js"
+import {ApiResponse} from "../utils/api-response.js"
 
 
 const healthCheck = (req,res) => {
     res.status(200).json(
-        new Apiresponse(200,{
+        new ApiResponse(200,{
             message:"server is running"
         })
     )

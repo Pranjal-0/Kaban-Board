@@ -11,7 +11,7 @@ import {
 } from "../controllers/task.controllers.js";
 import {
   validateProjectPermission,
-  verifyJWT,
+  verifyJwt,
 } from "../middlewares/auth.middleware.js"
 import { upload } from "../middlewares/multer.middleware.js";
 import { validate } from "../middlewares/validators.middlewares.js";
@@ -23,7 +23,7 @@ import {
 
 const router = Router();
 
-router.use(verifyJWT);
+router.use(verifyJwt);
 
 
 router

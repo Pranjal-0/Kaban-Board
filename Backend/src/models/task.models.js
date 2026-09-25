@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import { AvailableTaskStatus, TaskStatusEnum } from "../constants.js"; // Import your enums/constants
+import { UserStatusEnum, AvailableUserStatus } from "../utils/constants.js"; // Import your enums/constants
 
 const taskSchema = new Schema(
   {
@@ -35,8 +35,8 @@ const taskSchema = new Schema(
     },
     status: {
       type: String,
-      enum: AvailableTaskStatus, // Renamed to match task statuses rather than user statuses
-      default: TaskStatusEnum.TODO,
+      enum: AvailableUserStatus, 
+      default: UserStatusEnum.TODO,
     },
     attachments: {
       type: [
