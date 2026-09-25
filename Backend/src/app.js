@@ -16,8 +16,16 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   }),
 );
-import healthCheck from "./routes/healthcheck.routes.js"
- 
-app.use("/api/v1/healthcheck", healthCheck);
+import healthcheckRouter from "./routes/healthcheck.routes.js"
+import authRouter from "./routes/auth.routes.js"
+import noteRouter from "./routes/note.routes.js"
+
+
+
+
+
+app.use("/api/v1/healthcheck", healthcheckRouter);
+app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/notes", noteRouter);
 
 export default app;
